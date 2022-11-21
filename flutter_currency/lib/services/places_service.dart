@@ -13,14 +13,20 @@ class PlaceService{
   static const secondbase='/0.1/en/places';
   static const apiKey='5ae2e3f221c38a28845f05b6a575c9d739c06597bedad607b5a0cac6';
 
+
+  //obtener ubicacion de los lugares
   Future<List<Place>>geoName(String name)async{
 
     final url=Uri.https(urlBase,'$secondbase/geoname',{'apikey':apiKey,'name':name});
     final response=await http.get(url);
     Map<String,dynamic> responseDecode=json.decode(response.body);
+
+
+    // validar que traiga la longitud y latitud
     if(responseDecode.isNotEmpty && responseDecode.containsKey('lat') ){
       List places=await getPlace(responseDecode['lat'], responseDecode['lon']);
       if(places.isNotEmpty){
+        //convertir lista del api en una lista de places
         return Places.fromList(places).items;
       }else{
         return [];
@@ -31,6 +37,7 @@ class PlaceService{
 
   }
 
+  //Obtener lista de lugares de la api
   Future<List<dynamic>>getPlace(double lat,double lon)async{
     final query={'apikey':apiKey,'radius':'1000','limit':'5','offset':'0','rate':'2','format':'json','lon':'$lon','lat':'$lat'};
      final url=Uri.https(urlBase,'$secondbase/radius',query);

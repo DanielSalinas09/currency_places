@@ -39,8 +39,10 @@ class InputPlaces extends StatelessWidget {
         ));
   }
 
+
+  //lanzar peticion 700 milisegundos despues de que el usuario deje de escribir
   onCurrencyChange(BuildContext context) {
-    print('Hola' + input);
+    
     if (input != textController.text) {
       if (debounce?.isActive ?? false) debounce?.cancel();
       debounce = Timer(const Duration(milliseconds: 700), () {
